@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spell Rush - Results</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Nunito', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .results-container {
+            background: white;
+            border-radius: 24px;
+            max-width: 420px;
+            width: 100%;
+            padding: 32px 24px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: slideUp 0.5s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .trophy {
+            font-size: 64px;
+            text-align: center;
+            margin-bottom: 16px;
+            animation: bounce 1s ease-in-out;
+        }
+
+        @keyframes bounce {
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+
+        .title {
+            font-size: 32px;
+            font-weight: 800;
+            text-align: center;
+            background: linear-gradient(135deg, #58CC02 0%, #389600 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 24px;
+        }
+
+        .score-card {
+            background: linear-gradient(135deg, #58CC02 0%, #48B000 100%);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 24px;
+            color: white;
+            text-align: center;
+        }
+
+        .score-label {
+            font-size: 14px;
+            opacity: 0.9;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+
+        .score-value {
+            font-size: 48px;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        .rank {
+            font-size: 16px;
+            opacity: 0.95;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .stat-box {
+            background: #F7F7F7;
+            border-radius: 12px;
+            padding: 16px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 28px;
+            font-weight: 800;
+            color: #1CB0F6;
+            margin-bottom: 4px;
+        }
+
+        .stat-label {
+            font-size: 13px;
+            color: #777;
+        }
+
+        .mistakes-section {
+            background: #FFF3F3;
+            border-left: 4px solid #FF4B4B;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 24px;
+        }
+
+        .mistakes-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #FF4B4B;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .mistake-item {
+            background: white;
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .mistake-word {
+            font-weight: 700;
+            color: #333;
+        }
+
+        .mistake-translation {
+            font-size: 13px;
+            color: #777;
+        }
+
+        .mistake-count {
+            background: #FF4B4B;
+            color: white;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .cta-section {
+            margin-top: 24px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #58CC02 0%, #48B000 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 16px;
+            width: 100%;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-bottom: 4px;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 0 #389600;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 0 #389600;
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 0 #389600;
+        }
+
+        .practice-note {
+            text-align: center;
+            font-size: 12px;
+            color: #999;
+            margin-top: 4px;
+            margin-bottom: 12px;
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #1CB0F6;
+            border: 2px solid #1CB0F6;
+            border-radius: 12px;
+            padding: 14px;
+            width: 100%;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-secondary:hover {
+            background: #F0F9FF;
+        }
+
+        .full-ranking {
+            background: #F7F7F7;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 24px;
+            max-height: 420px;
+            overflow-y: auto;
+        }
+
+        .full-ranking-title {
+            font-size: 16px;
+            font-weight: 800;
+            color: #58CC02;
+            margin-bottom: 12px;
+            text-align: center;
+        }
+
+        .full-ranking .leaderboard-item {
+            padding: 6px 0;
+        }
+
+        .not-played-label {
+            font-size: 13px;
+            font-style: italic;
+            color: #999;
+        }
+
+        .leaderboard-preview {
+            background: #F7F7F7;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 24px;
+        }
+
+        .leaderboard-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: #777;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .leaderboard-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid #E5E5E5;
+        }
+
+        .leaderboard-item:last-child {
+            border-bottom: none;
+        }
+
+        .leaderboard-rank {
+            font-weight: 700;
+            color: #999;
+            width: 30px;
+        }
+
+        .leaderboard-name {
+            flex: 1;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .leaderboard-score {
+            font-weight: 700;
+            color: #1CB0F6;
+        }
+
+        .you {
+            background: #E3F2FD;
+            border-radius: 8px;
+            padding: 8px 12px;
+            margin: 0 -12px;
+        }
+
+        .medal {
+            font-size: 18px;
+            margin-right: 8px;
+        }
+
+        .peers-status {
+            text-align: center;
+            font-size: 13px;
+            color: #999;
+            margin-top: 8px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="results-container">
+        <div class="trophy">🏆</div>
+        <h1 class="title" id="title-text">Great Run!</h1>
+
+        <div class="score-card">
+            <div class="score-label">Your Score</div>
+            <div class="score-value" id="score-display">--</div>
+            <div class="rank" id="rank-display">Loading Duo Peers...</div>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-box">
+                <div class="stat-value" id="words-correct">--</div>
+                <div class="stat-label">Words Correct</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-value" id="completion-time">--</div>
+                <div class="stat-label">Time</div>
+            </div>
+        </div>
+
+        <div class="leaderboard-preview">
+            <div class="leaderboard-title">Your Duo Peers</div>
+            <div id="leaderboard-list">Loading...</div>
+            <div class="peers-status" id="peers-status"></div>
+        </div>
+
+        <div class="mistakes-section" id="mistakes-section">
+            <div class="mistakes-title">
+                <span>⚠️</span>
+                <span>Words to Practice</span>
+            </div>
+            <div id="mistakes-list"></div>
+        </div>
+
+        <div id="full-ranking" class="full-ranking" style="display:none">
+            <div class="full-ranking-title">Duo Peers Ranking</div>
+            <div id="full-ranking-list"></div>
+        </div>
+
+        <div class="cta-section">
+            <button class="btn-primary" onclick="playAgain()">
+                📖 Practice
+            </button>
+            <p class="practice-note">Practice does not affect your Duo Peers ranking.</p>
+            <button id="ranking-btn" class="btn-secondary" onclick="viewLeaderboard()">
+                View Duo Peers Ranking
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const score = params.get('score') || '10';
+        const time = params.get('time') || '25.00';
+        const total = params.get('total') || '10';
+
+        const baseScore = parseInt(score) * 200;
+        const timeBonus = Math.max(0, Math.floor((60 - parseFloat(time)) * 30));
+        const finalScore = baseScore + timeBonus;
+
+        document.getElementById('score-display').textContent = finalScore.toLocaleString();
+        document.getElementById('words-correct').textContent = `${score}/${total}`;
+        document.getElementById('completion-time').textContent = `${time}s`;
+
+        const accuracy = parseInt(score) / parseInt(total);
+        if (accuracy >= 1) {
+            document.getElementById('title-text').textContent = '¡Perfecto! 🌟';
+        } else if (accuracy >= 0.8) {
+            document.getElementById('title-text').textContent = '¡Muy bien!';
+        } else {
+            document.getElementById('title-text').textContent = 'Keep Practicing!';
+        }
+
+        const mistakesParam = params.get('mistakes');
+        const mistakesSection = document.getElementById('mistakes-section');
+        const mistakesList = document.getElementById('mistakes-list');
+
+        if (mistakesParam) {
+            try {
+                const mistakesData = JSON.parse(decodeURIComponent(mistakesParam));
+                if (mistakesData.length === 0) {
+                    mistakesSection.style.display = 'none';
+                } else {
+                    const counts = {};
+                    mistakesData.forEach(m => {
+                        const key = m.wrong;
+                        if (!counts[key]) counts[key] = { ...m, count: 0 };
+                        counts[key].count++;
+                    });
+                    Object.values(counts).forEach(m => {
+                        mistakesList.innerHTML += `
+                            <div class="mistake-item">
+                                <div>
+                                    <div class="mistake-word">${m.wrong} ❌</div>
+                                    <div class="mistake-translation">Correct: ${m.correct}</div>
+                                </div>
+                                <div class="mistake-count">${m.count}×</div>
+                            </div>`;
+                    });
+                }
+            } catch (e) {
+                mistakesSection.style.display = 'none';
+            }
+        } else {
+            mistakesSection.style.display = 'none';
+        }
+
+        const peersData = [
+            { name: "Andrea", score: 3521, played: true },
+            { name: "Carlos", score: 3104, played: true },
+            { name: "Sofia", score: 2998, played: true },
+            { name: "Valentina", score: 2876, played: true },
+            { name: "Diego", score: 2743, played: true },
+            { name: "Camila", score: 2654, played: true },
+            { name: "Mateo", score: 2589, played: true },
+            { name: "Isabella", score: 2501, played: true },
+            { name: "Santiago", score: 2435, played: true },
+            { name: "Luciana", score: 2367, played: true },
+            { name: "Sebastián", score: 2298, played: true },
+            { name: "Mariana", score: 2190, played: true },
+            { name: "Alejandro", score: 2087, played: true },
+            { name: "Paula", score: 1965, played: true },
+            { name: "Daniel", score: 1843, played: true },
+            { name: "Gabriela", score: 1756, played: true },
+            { name: "Nicolás", score: 1624, played: true },
+            { name: "Fernanda", score: 1498, played: true },
+            { name: "Tomás", score: 1320, played: true },
+            { name: "Miguel", score: 0, played: false },
+            { name: "Laura", score: 0, played: false },
+            { name: "Andrés", score: 0, played: false },
+            { name: "Renata", score: 0, played: false },
+            { name: "Joaquín", score: 0, played: false },
+            { name: "Emilia", score: 0, played: false },
+            { name: "Rafael", score: 0, played: false },
+            { name: "Catalina", score: 0, played: false },
+            { name: "Luis", score: 0, played: false },
+            { name: "Ana", score: 0, played: false },
+        ];
+
+        (function buildLeaderboard() {
+            const peers = peersData;
+            const playedPeers = peers.filter(p => p.played);
+            const allPlayed = [...playedPeers, { name: 'You', score: finalScore, played: true }];
+            allPlayed.sort((a, b) => b.score - a.score);
+
+            const playerRank = allPlayed.findIndex(p => p.name === 'You') + 1;
+            const totalPeers = 30;
+            const playedCount = allPlayed.length;
+            const percentile = Math.max(1, Math.round((playerRank / playedCount) * 100));
+
+            document.getElementById('rank-display').textContent =
+                `Top ${percentile}% of Duo Peers • Rank #${playerRank} out of ${totalPeers} Duo Peers`;
+
+            const medals = ['🥇', '🥈', '🥉'];
+            const leaderboardList = document.getElementById('leaderboard-list');
+            leaderboardList.innerHTML = '';
+
+            const top3 = allPlayed.slice(0, 3);
+            let playerShown = false;
+
+            top3.forEach((peer, i) => {
+                const isYou = peer.name === 'You';
+                if (isYou) playerShown = true;
+                leaderboardList.innerHTML += `
+                    <div class="leaderboard-item ${isYou ? 'you' : ''}">
+                        <span class="leaderboard-rank"><span class="medal">${medals[i]}</span></span>
+                        <span class="leaderboard-name">${peer.name}</span>
+                        <span class="leaderboard-score">${peer.score.toLocaleString()}</span>
+                    </div>`;
+            });
+
+            if (!playerShown) {
+                leaderboardList.innerHTML += `
+                    <div class="leaderboard-item you">
+                        <span class="leaderboard-rank">#${playerRank}</span>
+                        <span class="leaderboard-name">You</span>
+                        <span class="leaderboard-score">${finalScore.toLocaleString()}</span>
+                    </div>`;
+            }
+
+            document.getElementById('peers-status').textContent =
+                `${playedCount}/${totalPeers} Duo Peers have played so far — your ranking will update as more results come in.`;
+
+            const fullList = document.getElementById('full-ranking-list');
+            fullList.innerHTML = '';
+
+            allPlayed.forEach((peer, i) => {
+                const isYou = peer.name === 'You';
+                const rankLabel = i < 3 ? `<span class="medal">${medals[i]}</span>` : `#${i + 1}`;
+                fullList.innerHTML += `
+                    <div class="leaderboard-item ${isYou ? 'you' : ''}">
+                        <span class="leaderboard-rank">${rankLabel}</span>
+                        <span class="leaderboard-name">${peer.name}</span>
+                        <span class="leaderboard-score">${peer.score.toLocaleString()}</span>
+                    </div>`;
+            });
+
+            const notPlayed = peers.filter(p => !p.played);
+            notPlayed.forEach(peer => {
+                fullList.innerHTML += `
+                    <div class="leaderboard-item">
+                        <span class="leaderboard-rank">—</span>
+                        <span class="leaderboard-name">${peer.name}</span>
+                        <span class="not-played-label">Not played yet</span>
+                    </div>`;
+            });
+        })();
+
+        function playAgain() {
+            window.location.href = 'index.html';
+        }
+
+        function viewLeaderboard() {
+            document.getElementById('full-ranking').style.display = 'block';
+            document.getElementById('ranking-btn').style.display = 'none';
+        }
+    </script>
+</body>
+
+</html>
